@@ -1,58 +1,78 @@
-import imgsArr from './imges.js';
-
-
 class Slider {
-  constructor(slideWidth, slidesToShow, parent, elements) {
+  constructor(slideWidth /*number without "px"*/, slidesToShow, parent, imgPromise/* recieve array wich contains urls, async */) {
     this.slideWidth = slideWidth;
     this.offset = 0;
     this.parent = parent;
-    this.elements = elements;
+    this.imgPromise = imgPromise;
     this.sliderLength = null;
     this.slidesToShow = slidesToShow;
     this.slidesToShowWidth = this.slideWidth * this.slidesToShow;
     this.btns = null;
     this.slider = null;
-
   }
 
-  create = () => {
-    const elements = [];
-    for (let elem in this.elements) {
-      // console.log(this.elements[elem]);
-      elements.push(`<li class="slider__item"><img src="./icons/${this.elements[elem]}.png" alt="img"></li>`)
+  createMarkup = async () => {
+    this.parent.innerHTML = '<div class="loader">Loading...</div>'
+    let imgArr = await this.imgPromise.catch(error => this.parent.innerHTML = this.createError())
+    if(Array.isArray(imgArr)) {
+      const elements = [];
+      for (let elem of imgArr) {
+        elements.push(
+          `<li class="slider__item"><img src="${elem}" alt="img"></li>`
+        );
+      }
+      this.parent.innerHTML = `<div class="slider">
+                                    <div class="slider__line">
+                                        <ul class="slider__list">
+                                         ${elements.join("")}
+                                        </ul>
+                                    </div>
+                                    <div class="btns">
+                                        <a class="btn" id="prev">prev</a>
+                                        <a class="btn" id="next">next</a>
+                                    </div>
+                                </div>`;
+      this.createRefs();
+      this.addStyles();
+      this.sliderLength = this.slider.children.length;
+      this.addListeners();
     }
-    this.parent.innerHTML = `<div class="slider">
-                                  <div class="slider__line">
-                                      <ul class="slider__list">
-                                       ${elements.join("")}
-                                      </ul>
-                                  </div>
-                                  <div class="btns">
-                                      <a class="btn" id="prev">prev</a>
-                                      <a class="btn" id="next">next</a>
-                                  </div>
-                              </div>`;
+  };
+
+  createRefs = () => {
     this.btns = document.querySelector(".btns");
     this.slider = document.querySelector(".slider__list");
-    document.querySelector('.slider__line').style.width = `${this.slidesToShowWidth}px`;
-    document.querySelector('.slider').style.cssText = `width: ${this.slidesToShowWidth * 1.1}px`;
-    this.sliderLength = this.slider.children.length;
-    this.addListeners();
   }
+
+  addStyles = () => {
+    document.querySelector(".slider__line").style.width = `${this.slidesToShowWidth}px`;
+    document.querySelector(".slider").style.cssText = `width: ${this.slidesToShowWidth * 1.1}px`;
+  }
+
+  createError = () => {
+    return (
+      `<div>OOOPS!!!<br>We are so sorry...</div>`
+    )
+  }
+
 
   moveLeft = () => {
     if (this.offset > 0) {
-      this.offset = -this.slideWidth * this.sliderLength + this.slidesToShowWidth;
+      this.offset =
+        -this.slideWidth * this.sliderLength + this.slidesToShowWidth;
     }
     this.slider.style.left = `${this.offset}px`;
-  }
+  };
 
   moveRigth = () => {
-    if (this.offset < -this.slideWidth * this.sliderLength + this.slidesToShowWidth) {
+    if (
+      this.offset <
+      -this.slideWidth * this.sliderLength + this.slidesToShowWidth
+    ) {
       this.offset = 0;
     }
     this.slider.style.left = `${this.offset}px`;
-  }
+  };
 
   addListeners = () => {
     this.btns.addEventListener("click", (event) => {
@@ -65,14 +85,26 @@ class Slider {
       }
     });
   };
+}
 
+const fetchImg = async () => {
+  let APIKEY = "p-VW9sNzQ8SueB4-0OXuBjKhjYnJ4y0MJVu99_uhXDE";
+  let URI = "https://api.unsplash.com/photos?page=1&client_id=";
+  const images = await fetch(`${URI}${APIKEY}`)
+    .then((res) => res.json())
+    .then((res) => res.map(item => item.urls.small))
+  return images.length === 10 ? images : console.log('never mind');
 }
 
 window.addEventListener("DOMContentLoaded", () => {
   const slideWidth = 200;
   let slidesToShow = 3;
-  const body = document.querySelector('body');
+  const body = document.querySelector("body");
+  
 
-  const newSlider = new Slider(slideWidth, slidesToShow, body, imgsArr);
-  newSlider.create();
+
+  const newSlider = new Slider(slideWidth, slidesToShow, body, fetchImg());
+  newSlider.createMarkup();
 });
+
+
