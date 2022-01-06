@@ -18,7 +18,7 @@ class Slider {
   create = () => {
     const elements = [];
     for (let elem in this.elements) {
-      console.log(this.elements[elem]);
+      // console.log(this.elements[elem]);
       elements.push(`<li class="slider__item"><img src="./icons/${this.elements[elem]}.png" alt="img"></li>`)
     }
     this.parent.innerHTML = `<div class="slider">
@@ -38,11 +38,6 @@ class Slider {
     document.querySelector('.slider').style.cssText = `width: ${this.slidesToShowWidth * 1.1}px`;
     this.sliderLength = this.slider.children.length;
     this.addListeners();
-
-
-    // fetch('https://api.flaticon.com/v2/6acdffObf431fe8f63f0715ec52ecc33c22505e4')
-    //   .then(res => console.log(res))
-    
   }
 
   moveLeft = () => {
