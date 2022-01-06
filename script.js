@@ -1,14 +1,49 @@
+import imgsArr from './imges.js';
+
+
 class Slider {
-  constructor(btns, slider, slideWidth, slidesSum) {
-    this.btns = btns;
-    this.slider = slider;
+  constructor(slideWidth, slidesToShow, parent, elements) {
     this.slideWidth = slideWidth;
     this.offset = 0;
-    this.sliderLength = this.slider.children.length;
-    this.slidesSum = slidesSum;
-    this.slidesToShowWidth = this.slideWidth * this.slidesSum;
+    this.parent = parent;
+    this.elements = elements;
+    this.sliderLength = null;
+    this.slidesToShow = slidesToShow;
+    this.slidesToShowWidth = this.slideWidth * this.slidesToShow;
+    this.btns = null;
+    this.slider = null;
+
   }
 
+  create = () => {
+    const elements = [];
+    for (let elem in this.elements) {
+      console.log(this.elements[elem]);
+      elements.push(`<li class="slider__item"><img src="./icons/${this.elements[elem]}.png" alt="img"></li>`)
+    }
+    this.parent.innerHTML = `<div class="slider">
+                                  <div class="slider__line">
+                                      <ul class="slider__list">
+                                       ${elements.join("")}
+                                      </ul>
+                                  </div>
+                                  <div class="btns">
+                                      <a class="btn" id="prev">prev</a>
+                                      <a class="btn" id="next">next</a>
+                                  </div>
+                              </div>`;
+    this.btns = document.querySelector(".btns");
+    this.slider = document.querySelector(".slider__list");
+    document.querySelector('.slider__line').style.width = `${this.slidesToShowWidth}px`;
+    document.querySelector('.slider').style.cssText = `width: ${this.slidesToShowWidth * 1.1}px`;
+    this.sliderLength = this.slider.children.length;
+    this.addListeners();
+
+
+    // fetch('https://api.flaticon.com/v2/6acdffObf431fe8f63f0715ec52ecc33c22505e4')
+    //   .then(res => console.log(res))
+    
+  }
 
   moveLeft = () => {
     if (this.offset > 0) {
@@ -24,7 +59,7 @@ class Slider {
     this.slider.style.left = `${this.offset}px`;
   }
 
-  start = () => {
+  addListeners = () => {
     this.btns.addEventListener("click", (event) => {
       if (event.target.id === "prev") {
         this.offset += this.slideWidth;
@@ -39,10 +74,10 @@ class Slider {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  const btns = document.querySelector(".btns");
-  const slider = document.querySelector(".slider__list");
   const slideWidth = 200;
+  let slidesToShow = 3;
+  const body = document.querySelector('body');
 
-const carousel = new Slider(btns, slider, slideWidth, 3);
-carousel.start();
+  const newSlider = new Slider(slideWidth, slidesToShow, body, imgsArr);
+  newSlider.create();
 });
