@@ -99,11 +99,11 @@ class Slider {
 
 const fetchImg = async () => {
   let APIKEY = "p-VW9sNzQ8SueB4-0OXuBjKhjYnJ4y0MJVu99_uhXDE";
-  let URI = "https://api.unsplash.coom/photos?page=1&client_id=";
+  let URI = "https://api.unsplash.com/photos?page=1&client_id=";
   const images = await fetch(`${URI}${APIKEY}`)
     .then((res) => res.json())
     .then((res) => res.map(item => item.urls.small))
-  return images.length === 10 ? images : this.createError();
+  return images.length === 10 ? images : console.log('Something went wrong');
 }
 
 window.addEventListener("DOMContentLoaded", () => {

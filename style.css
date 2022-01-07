@@ -86,15 +86,15 @@ body {
 .error {
     margin: 28vh auto 0 auto;
     width: 250px;
-    padding: auto 0;
-    background-color: rgb(128, 57, 57);
+    padding: 10px 0;
+    background-color: rgb(252, 0, 0);
     border-radius: 5px;
     color: #fff;
     font-size: 30px;
     text-align: center;
-
+    transition: all .5s;
+    transform: rotate(-20deg);
 }
-
 
 
 /* Loader */
