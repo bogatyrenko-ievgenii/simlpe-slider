@@ -83,6 +83,18 @@ body {
     box-shadow: 2px 2px 3px rgb(12, 4, 4) ;
 }
 
+.error {
+    margin: 28vh auto 0 auto;
+    width: 250px;
+    padding: auto 0;
+    background-color: rgb(128, 57, 57);
+    border-radius: 5px;
+    color: #fff;
+    font-size: 30px;
+    text-align: center;
+
+}
+
 
 
 /* Loader */

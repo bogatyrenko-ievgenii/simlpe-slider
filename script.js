@@ -22,11 +22,11 @@ class Slider {
   };
 
   createError = () => {
-    return `<div class='error'>OOOPS!!!<br>We are so sorry...</div>`
+    return `<div class='error'>OOOPS!!!<br>We are so sorry...<br> Something went wrong...</div>`
   }
 
   handleImages = () => {
-    return this.imgPromise.catch(error => this.parent.innerHTML = this.createError())
+    return this.imgPromise.catch( () => this.parent.innerHTML = this.createError())
   }
 
   renderSlider = (images) => {
@@ -99,11 +99,11 @@ class Slider {
 
 const fetchImg = async () => {
   let APIKEY = "p-VW9sNzQ8SueB4-0OXuBjKhjYnJ4y0MJVu99_uhXDE";
-  let URI = "https://api.unsplash.com/photos?page=1&client_id=";
+  let URI = "https://api.unsplash.coom/photos?page=1&client_id=";
   const images = await fetch(`${URI}${APIKEY}`)
     .then((res) => res.json())
     .then((res) => res.map(item => item.urls.small))
-  return images.length === 10 ? images : console.log('never mind');
+  return images.length === 10 ? images : this.createError();
 }
 
 window.addEventListener("DOMContentLoaded", () => {
