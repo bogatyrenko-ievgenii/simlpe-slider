@@ -1,5 +1,5 @@
 class Slider {
-  constructor(slideWidth /*number without "px"*/, slidesToShow, parent, imgPromise/* recieve array wich contains urls, async */) {
+  constructor(slideWidth /*number without "px"*/, slidesToShow, parent, imgPromise/* recieved array wich contains urls, async */) {
     this.slideWidth = slideWidth;
     this.offset = 0;
     this.parent = parent;
@@ -12,13 +12,29 @@ class Slider {
   }
 
   createMarkup = async () => {
-    this.parent.innerHTML = '<div class="loader">Loading...</div>'
-    let imgArr = await this.imgPromise.catch(error => this.parent.innerHTML = this.createError())
-    if(Array.isArray(imgArr)) {
+    this.renderLoading();
+    const images = await this.handleImages();
+    this.renderSlider(images);
+    this.createRefs();
+    this.addStyles(); //basic styles
+    this.sliderLength = this.slider.children.length;
+    this.addListeners();
+  };
+
+  createError = () => {
+    return `<div class='error'>OOOPS!!!<br>We are so sorry...</div>`
+  }
+
+  handleImages = () => {
+    return this.imgPromise.catch(error => this.parent.innerHTML = this.createError())
+  }
+
+  renderSlider = (images) => {
+    if(Array.isArray(images)) {
       const elements = [];
-      for (let elem of imgArr) {
+      for (let image of images) {
         elements.push(
-          `<li class="slider__item"><img src="${elem}" alt="img"></li>`
+          `<li class="slider__item"><img src="${image}" alt="img"></li>`
         );
       }
       this.parent.innerHTML = `<div class="slider">
@@ -32,12 +48,8 @@ class Slider {
                                         <a class="btn" id="next">next</a>
                                     </div>
                                 </div>`;
-      this.createRefs();
-      this.addStyles();
-      this.sliderLength = this.slider.children.length;
-      this.addListeners();
     }
-  };
+  }
 
   createRefs = () => {
     this.btns = document.querySelector(".btns");
@@ -49,10 +61,8 @@ class Slider {
     document.querySelector(".slider").style.cssText = `width: ${this.slidesToShowWidth * 1.1}px`;
   }
 
-  createError = () => {
-    return (
-      `<div>OOOPS!!!<br>We are so sorry...</div>`
-    )
+  renderLoading = () => {
+    this.parent.innerHTML = '<div class="loader">Loading...</div>';
   }
 
 
@@ -100,8 +110,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const slideWidth = 200;
   let slidesToShow = 3;
   const body = document.querySelector("body");
-  
-
 
   const newSlider = new Slider(slideWidth, slidesToShow, body, fetchImg());
   newSlider.createMarkup();
