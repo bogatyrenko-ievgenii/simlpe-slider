@@ -1,5 +1,3 @@
-import APIKEY from "./apikey";
-
 class Slider {
   constructor(slideWidth /*number without "px"*/, slidesToShow, parent, imgPromise/* recieved array wich contains urls, async */) {
     this.slideWidth = slideWidth;
@@ -28,7 +26,7 @@ class Slider {
   }
 
   handleImages = () => {
-    return this.imgPromise.catch( () => this.parent.innerHTML = this.createError())
+    return this.imgPromise.catch(() => this.parent.innerHTML = this.createError())
   }
 
   renderSlider = (images) => {
@@ -99,22 +97,8 @@ class Slider {
   };
 }
 
-const fetchImg = async () => {
 
-  let URI = "https://api.unsplash.com/photos?page=1&client_id=";
-  const images = await fetch(`${URI}${APIKEY}`)
-    .then((res) => res.json())
-    .then((res) => res.map(item => item.urls.small))
-  return images.length === 10 ? images : console.log('Something went wrong');
-}
 
-window.addEventListener("DOMContentLoaded", () => {
-  const slideWidth = 200;
-  let slidesToShow = 3;
-  const body = document.querySelector("body");
-
-  const newSlider = new Slider(slideWidth, slidesToShow, body, fetchImg());
-  newSlider.createMarkup();
-});
+export default Slider;
 
 

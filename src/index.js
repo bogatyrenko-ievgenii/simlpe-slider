@@ -1,3 +1,2 @@
-import './style.css';
-
-import './script'
+import './style/style.css';
+import './js/newSlider';
