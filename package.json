@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://gitspawn.github.io/webpack"
   },
-  "homepage": "https://github.com/bogatyrenko-ievgenii",
+  "homepage": "https://bogatyrenko-ievgenii.github.io/simlpe-slider",
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/plugin-proposal-class-properties": "^7.10.4",

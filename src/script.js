@@ -1,3 +1,5 @@
+import APIKEY from "./apikey";
+
 class Slider {
   constructor(slideWidth /*number without "px"*/, slidesToShow, parent, imgPromise/* recieved array wich contains urls, async */) {
     this.slideWidth = slideWidth;
@@ -98,7 +100,7 @@ class Slider {
 }
 
 const fetchImg = async () => {
-  let APIKEY = "p-VW9sNzQ8SueB4-0OXuBjKhjYnJ4y0MJVu99_uhXDE";
+
   let URI = "https://api.unsplash.com/photos?page=1&client_id=";
   const images = await fetch(`${URI}${APIKEY}`)
     .then((res) => res.json())
